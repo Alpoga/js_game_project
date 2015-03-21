@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="32" tileheight="32" nextobjectid="4">
  <tileset firstgid="1" name="grass-tiles-2-small" tilewidth="32" tileheight="32">
   <image source="../../../../../../../../../artasset/tileset/grass-tiles-2-small.png" width="384" height="192"/>
  </tileset>
@@ -388,8 +388,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="225"/>
+   <tile gid="226"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -614,6 +614,20 @@
    <tile gid="0"/>
   </data>
  </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="3" name="sprite" type="player" x="256" y="96" width="32" height="32">
+   <properties>
+    <property name="animSpeed" value="150"/>
+    <property name="h" value="128"/>
+    <property name="numFrames" value="3"/>
+    <property name="numRows" value="4"/>
+    <property name="source" value="C:/users/alan/documents/webprogramming/resource/pics/sprite.png"/>
+    <property name="w" value="96"/>
+    <property name="x" value="0"/>
+    <property name="y" value="0"/>
+   </properties>
+  </object>
+ </objectgroup>
  <layer name="Tile Layer 3" width="20" height="15">
   <data>
    <tile gid="0"/>
@@ -672,8 +686,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="209"/>
+   <tile gid="210"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
