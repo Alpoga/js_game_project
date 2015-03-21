@@ -615,7 +615,7 @@
   </data>
  </layer>
  <objectgroup name="Object Layer 1">
-  <object id="3" name="sprite" type="player" x="256" y="96" width="32" height="32">
+  <object id="3" name="sprite" type="spriteSheet" x="256" y="96" width="32" height="32">
    <properties>
     <property name="animSpeed" value="150"/>
     <property name="h" value="128"/>

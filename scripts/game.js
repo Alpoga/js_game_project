@@ -78,6 +78,23 @@ define(["scripts/shapes.js"], function (shapes) {
                     }
                     return result;
                 },
+                // Check from presence of integer in passed string, returns the value as Number type,
+                // pass the value 'true' as second argument to throw an exception when the parseInt call
+                // fails to produce a number
+                checkInt = function (str) {
+                    var result,
+                        args = arguments;
+                    if (typeof str === "string" && /^\d+$/.test(str)) {
+                        result = parseInt(str, 10);
+                        if (!isNaN(result)) {
+                            return result;
+                        }
+                        if (args.length > 1 && args[1] === true) {
+                            throw new TypeError("parser.checkInt encountered value not convertible to int: " + result);
+                        }
+                    }
+                    return str;
+                },
                 parseTiles = function (xml) {
                     var result = [],
                         data = xml.getElementsByTagName("tileset"),
@@ -124,6 +141,42 @@ define(["scripts/shapes.js"], function (shapes) {
                         tiles = data[i].getElementsByTagName("tile");
                         temp.grid.forEach(gridSet, temp);
                         result.push({name: temp.name, width: temp.width, height: temp.height, grid: temp.grid});
+                    }
+                    return result;
+                },
+                parseObjects = function (xml) {
+                    var result = [],
+                        data = xml.getElementsByTagName("objectgroup"),
+                        objGroup,
+                        objs,
+                        obj,
+                        props,
+                        prop,
+                        i = 0,
+                        j = 0,
+                        k = 0;
+                    for (i = 0; i < data.length; i++) {
+                        objGroup = {};
+                        objGroup.name = data[i].getAttribute("name");
+                        objs = data[i].getElementsByTagName("object");
+                        objGroup.objects = [];
+                        for (j = 0; j < objs.length; j++) {
+                            obj = {};
+                            obj.id = checkInt(objs[j].getAttribute("id"), true);
+                            obj.name = objs[j].getAttribute("name");
+                            obj.type = objs[j].getAttribute("type");
+                            obj.x = checkInt(objs[j].getAttribute("x"), true);
+                            obj.y = checkInt(objs[j].getAttribute("y"), true);
+                            obj.w = checkInt(objs[j].getAttribute("width"), true);
+                            obj.h = checkInt(objs[j].getAttribute("height"), true);
+                            props = objs[j].getElementsByTagName("property");
+                            prop = {};
+                            for (k = 0; k < props.length; k++) {
+                                prop[props[k].getAttribute("name")] = checkInt(props[k].getAttribute("value"), true);
+                            }
+                            objGroup.objects.push({id: obj.id, name: obj.name, type: obj.type, x: obj.x, y: obj.y, w: obj.w, h: obj.h, properties: prop});
+                        }
+                        result.push({group: objGroup.name, objects: objGroup.objects});
                     }
                     return result;
                 },
@@ -190,6 +243,7 @@ define(["scripts/shapes.js"], function (shapes) {
                     result.tileHeight = mapEle.getAttribute("tileheight");
                     result.layers = parseLayers(xml);
                     result.tilesets = parseTiles(xml);
+                    result.objectGroups = parseObjects(xml);
                     return result;
                 };
 
