@@ -135,7 +135,7 @@ define((function (exported) {
         throw new Error("shapes.Vector.maxY requires type with 'x' property.");
     };
     Vector.prototype.inside = function (rect) {
-        return (this.x >= rect.vector.x && this.y >= rect.vector.y && this.x < rect.vector.x + rect.size.w && this.y <= rect.vector.y + rect.size.h ? true : false);
+        return (this.x >= rect.x && this.y >= rect.y && this.x < rect.x + rect.w && this.y <= rect.y + rect.h ? true : false);
     };
     Vector.prototype.length = function () {
         var args = arguments;
@@ -674,17 +674,6 @@ define((function (exported) {
         this.img.draw(ctx);
     };
 
-    function TileSet(obj) {
-        this.firstGid = obj.firstGid;
-        this.name = obj.name;
-        this.source = obj.source;
-        this.tileWidth = obj.tileWidth;
-        this.tileHeight = obj.tileHeight;
-        this.imageWidth = obj.imageWidth;
-        this.imageHeight = obj.imageHeight;
-    }
-
-
     // add functions to export object to interface with the module:
     exported.makeVector = function () {
         var args = arguments,
@@ -748,12 +737,6 @@ define((function (exported) {
             speed = args[0];
         }
         return new Timer(speed);
-    };
-    exported.makeTileSet = function (obj) {
-        if (obj.hasOwnProperty("firstGid") && obj.hasOwnProperty("name") && obj.hasOwnProperty("source") && obj.hasOwnProperty("tileWidth") && obj.hasOwnProperty("tileHeight") && obj.hasOwnProperty("imageWidth") && obj.hasOwnProperty("imageHeight")) {
-            return new TileSet(obj);
-        }
-        throw new TypeError("Tileset requires properties: firstGid, name, source, tileWidth, tileHeight, imageWidth, imageHeight");
     };
 
     return exported;

@@ -1,22 +1,33 @@
-require(["scripts/shapes.js"], function (shapes) {
+require(["scripts/game.js", "scripts/shapes.js"], function (game, shapes) {
     var cnvs = document.getElementById("cnvs1"),
         ctx = cnvs.getContext("2d"),
-        bigRect = shapes.makeRect(100, 100, cnvs.width - 200, cnvs.height - 200),
-        lilRect = shapes.makeRect(0, 0, 10, 10);
+        imageMap = game.imageMap,
+        map = game.makeMap("https://raw.githubusercontent.com/Alpoga/js_game_project/master/xml/maptest.tmx", shapes.makeRect(0, 0, cnvs.width, cnvs.height)),
+        cursorVec = shapes.makeVector(0, 0),
+        center = shapes.makeVector(cnvs.width / 2, cnvs.height / 2),
+        grid = shapes.makeGrid(2, 2);
+    
+    grid.forEach(function (ele, vec) {
+        this.set(vec, shapes.makeRect(vec.x * cnvs.width / 2, vec.y * cnvs.height / 2, cnvs.width / 2, cnvs.height / 2));
+    }, grid);
         
-    document.getElementById("cnvs1").onmousemove = function (event) {
-        var x = 0, y = 0;
+    cnvs.onmousemove = function (event) {
         event = event || window.event;
         event.target = event.target || event.srcElement;
-        x = event.offsetX || event.layerX;
-        y = event.offsetY || event.layerY;
-        lilRect.center(lilRect.center().plus(shapes.makeVector(x, y).minus(lilRect.center()).divide(30)));
-    };
+        event.offsetX = event.offsetX || event.layerX;
+        event.offsetY = event.offsetY || event.layerY;
+        cursorVec.equals(shapes.makeVector(event.offsetX, event.offsetY));
+    }
         
     setInterval(function () {
         ctx.clearRect(0, 0, cnvs.width, cnvs.height);
-        ctx.fillStyle = "rgba(0, 0, 0, .5)";
-        bigRect.fill(ctx);
-        lilRect.fill(ctx);
-    }, 1);    
+        map.position(cursorVec);
+        ctx.strokeStyle = "rgba(255, 0, 0, 1)";
+        map.draw(ctx);
+        ctx.strokeStyle = "rgba(0, 255, 0, 1)";
+        grid.forEach(function (ele) {
+            ele.stroke(ctx);
+        })
+        ctx.fillText("Pos: " + map.destRect.topLeft().toString(), cursorVec.x, cursorVec.y);
+    }, 1);
 });
