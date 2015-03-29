@@ -617,7 +617,7 @@
  <objectgroup name="Object Layer 1">
   <object id="3" name="sprite" type="Player" x="256" y="96" width="32" height="32">
    <properties>
-    <property name="animmaps" value="[{&quot;name&quot;:&quot;sprite&quot;, &quot;row&quot;:0, &quot;first&quot;:0, &quot;type&quot;:&quot;key&quot;, &quot;triggers&quot;:[&quot;s&quot;,&quot;down&quot;]}, {&quot;name&quot;:&quot;sprite&quot;, &quot;row&quot;:1, &quot;first&quot;:0, &quot;length&quot;:3, &quot;type&quot;:&quot;key&quot;, &quot;triggers&quot;:[&quot;a&quot;,&quot;left&quot;]}, {&quot;name&quot;:&quot;sprite&quot;, &quot;row&quot;:2, &quot;first&quot;:0, &quot;length&quot;:3, &quot;type&quot;:&quot;key&quot;, &quot;triggers&quot;:[&quot;d&quot;, &quot;right&quot;]}, {&quot;name&quot;:&quot;sprite&quot;, &quot;row&quot;:3, &quot;first&quot;:0, &quot;length&quot;:3, &quot;type&quot;:&quot;key&quot;, &quot;triggers&quot;:[&quot;s&quot;, &quot;down&quot;]}]"/>
+    <property name="animmaps" value="[{'name':'sprite', 'row':0, 'first':0, 'type':'key', 'triggers':['s','down']}, {'name':'sprite', 'row':1, 'first':0, 'length':3, 'type':'key', 'triggers':['a','left']}, {'name':'sprite', 'row':2, 'first':0, 'length':3, 'type':'key', 'triggers':['d', 'right']}, {'name':'sprite', 'row':3, 'first':0, 'length':3, 'type':'key', 'triggers':['s', 'down']}]"/>
     <property name="animspeed" value="100"/>
     <property name="movespeed" value="1.1"/>
     <property name="numframes" value="3"/>
