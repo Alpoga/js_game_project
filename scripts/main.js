@@ -1,33 +1,37 @@
 require(["scripts/game.js", "scripts/shapes.js"], function (game, shapes) {
     var cnvs = document.getElementById("cnvs1"),
         ctx = cnvs.getContext("2d"),
-        imageMap = game.imageMap,
-        map = game.makeMap("https://raw.githubusercontent.com/Alpoga/js_game_project/master/xml/maptest.tmx", shapes.makeRect(0, 0, cnvs.width, cnvs.height)),
-        cursorVec = shapes.makeVector(0, 0),
-        center = shapes.makeVector(cnvs.width / 2, cnvs.height / 2),
-        grid = shapes.makeGrid(2, 2);
+        conSprite,
+        imageMap = game.imageMap(),
+        inputHandler = game.inputHandler(),
+        map = game.makeMap("https://raw.githubusercontent.com/Alpoga/js_game_project/master/xml/maptest.tmx");
+        
+    document.getElementsByTagName("body")[0].style.overflow = "hidden";
     
-    grid.forEach(function (ele, vec) {
-        this.set(vec, shapes.makeRect(vec.x * cnvs.width / 2, vec.y * cnvs.height / 2, cnvs.width / 2, cnvs.height / 2));
-    }, grid);
-        
-    cnvs.onmousemove = function (event) {
-        event = event || window.event;
-        event.target = event.target || event.srcElement;
-        event.offsetX = event.offsetX || event.layerX;
-        event.offsetY = event.offsetY || event.layerY;
-        cursorVec.equals(shapes.makeVector(event.offsetX, event.offsetY));
+    imageMap.set("sprite", "C:/users/alan/documents/webprogramming/resource/pics/sprite.png");
+    inputHandler.bind(cnvs, "mousemove");
+    inputHandler.bind(cnvs, "mousebutton");
+    inputHandler.bind(document.querySelector("body"), "key");
+    
+    function checkMouseAbove(cursor) {
+        var diff = cursor.minus(this.dRect().center());
+        if (diff.y < 0 && Math.abs(diff.y) > Math.abs(diff.x)) {
+            return true;
+        }
+        return false;
     }
-        
+    
+    conSprite = game.makePlayer(game.makeControlledSprite(game.makeSprite("sprite", shapes.makeRect(0, 0, 32, 32), shapes.makeRect(100, 100, 50, 50), 3, 4, 75),[
+        game.makeAnimMap("sprite", 0, 0, 3, "key", ["s", "down"]),
+        game.makeAnimMap("sprite", 1, 0, 3, "key", ["a", "left"]),
+        game.makeAnimMap("sprite", 2, 0, 3, "key", ["d", "right"]),
+        game.makeAnimMap("sprite", 3, 0, 3, "key", ["w", "up"])
+    ]), 1.4);
+    
     setInterval(function () {
         ctx.clearRect(0, 0, cnvs.width, cnvs.height);
-        map.position(cursorVec);
-        ctx.strokeStyle = "rgba(255, 0, 0, 1)";
         map.draw(ctx);
-        ctx.strokeStyle = "rgba(0, 255, 0, 1)";
-        grid.forEach(function (ele) {
-            ele.stroke(ctx);
-        })
-        ctx.fillText("Pos: " + map.destRect.topLeft().toString(), cursorVec.x, cursorVec.y);
+        conSprite.update();
+        conSprite.draw(ctx);
     }, 1);
 });

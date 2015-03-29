@@ -147,7 +147,7 @@ define((function (exported) {
     Vector.prototype.normalize = function () {
         var l = this.length();
         if (l > 0) {
-            this.equals(this.multiplyN(1 / l));
+            this.equals(this.multiply(1 / l));
         }
         return this;
     };
@@ -617,6 +617,14 @@ define((function (exported) {
         this.now = window.performance.now();
         this.speed = milliseconds;
     }
+    Timer.prototype.speed = function () {
+        var args = arguments;
+        if (args.length > 0) {
+            this.speed = args[0];
+            return this;
+        }
+        return this.speed;
+    };
     Timer.prototype.timedOut = function () {
         if (this.now - this.past > this.speed) {
             this.past = window.performance.now();
@@ -629,7 +637,7 @@ define((function (exported) {
     // SPRITESHEET
     function SpriteSheet(srcId, srcRect, frames, rows, animSpeed) {
         this.img = new Img(srcId);
-        this.img.srcRect(srcRect.clone());
+        this.img.srcRect(new Rect(srcRect.x, srcRect.y, Math.floor(srcRect.w / frames), Math.floor(srcRect.h / rows)));
         this.srcX = srcRect.x;
         this.srcY = srcRect.y;
         this.img.destRect(new Size(srcRect.w / frames, srcRect.h / rows));
@@ -675,6 +683,18 @@ define((function (exported) {
     };
 
     // add functions to export object to interface with the module:
+    exported.isVector = function (obj) {
+        return (obj instanceof Vector);
+    };
+    exported.isSize = function (obj) {
+        return (obj instanceof Size);
+    };
+    exported.isRect = function (obj) {
+        return (obj instanceof Rect);
+    };
+    exported.isGrid = function (obj) {
+        return (obj instanceof Grid);
+    };
     exported.makeVector = function () {
         var args = arguments,
             x = (args.length > 0 ? args[0] : 0),
