@@ -341,7 +341,7 @@ define(["scripts/shapes.js"], function (shapes) {
                             destRect = shapes.makeRect(parseInt(playerEle.getAttribute("x"), 10), parseInt(playerEle.getAttribute("y"), 10), parseInt(playerEle.getAttribute("width"), 10), parseInt(playerEle.getAttribute("height"), 10)),
                             name = playerEle.getAttribute("name"),
                             props = getProperties(playerEle),
-                            sr = JSON.parse(props.srcrect),
+                            sr = JSON.parse(props.srcRect),
                             srcRect = shapes.makeRect(parseInt(sr.x, 10), parseInt(sr.y, 10), parseInt(sr.w, 10), parseInt(sr.h, 10)),
                             moveSpeed = parseInt(props.movespeed, 10),
                             animSpeed = parseInt(props.animspeed, 10),
@@ -350,30 +350,30 @@ define(["scripts/shapes.js"], function (shapes) {
                             am = JSON.parse(props.animmaps),
                             animMaps = new Array(am.length),
                             i = 0;
-                            for (i = 0; i < am.length; i++) {
-                                animMaps.push(new AnimationMap(am[i].name, parseInt(am[i].row, 10), parseInt(am[i].first, 10), parseInt(am[i].length, 10), am[i].type, am[i].triggers));
-                            }
-                            return new Player(new ControlledSpriteObject(new SpriteObject(new ImageObject(name, srcRect, destRect), numFrames, numRows, animSpeed), animMaps), moveSpeed);
+                        for (i = 0; i < am.length; i++) {
+                            animMaps.push(new AnimationMap(am[i].name, parseInt(am[i].row, 10), parseInt(am[i].first, 10), parseInt(am[i].length, 10), am[i].type, am[i].triggers));
+                        }
+                        return new Player(new ControlledSpriteObject(new SpriteObject(new ImageObject(name, srcRect, destRect), numFrames, numRows, animSpeed), animMaps), moveSpeed);
                     },
                     methods = {
                         player: player
                     },
-                    createObjects (objLayer) {
+                    createObjects = function (objLayer) {
                         var i = 0,
                             objs = objLayer.getElementsByTagName("object"),
                             result = [],
                             type;
                         for (i = 0; i < objs.length; i++) {
                             type = objs[i].getAttribute("type");
-                            if (methods(type.toLowerCase())) {
-                                result.push(methods[type](objs[i]))
+                            if (methods.hasOwnProperty(type.toLowerCase())) {
+                                result.push(methods[type.toLowerCase()](objs[i]));
                             }
                         }
                         return result;
                     };
                 return {
-                    createObjects: createObjects;
-                    player: player;
+                    createObjects: createObjects,
+                    player: player
                 };
             }());
         //---------------------------------------------------------------------------------------------------------//
@@ -675,14 +675,14 @@ define(["scripts/shapes.js"], function (shapes) {
                     tileset;
                 if (gid) {
                     tileset = getTileSet(gid);
-                    this.set(vec, new ImageObject(tileset.name, 
-                                                  shapes.makeRect(tileset.margin + Math.floor((gid - tileset.firstGid) % tileset.numColumns) * (tileset.tileWidth + tileset.spacing), 
-                                                                  tileset.margin + Math.floor((gid - tileset.firstGid) / tileset.numColumns) * (tileset.tileHeight + tileset.spacing), 
-                                                                  tileset.tileWidth, 
-                                                                  tileset.tileHeight), 
-                                                  shapes.makeRect(vec.x * tileset.tileWidth, 
-                                                                  vec.y * tileset.tileHeight, 
-                                                                  tileset.tileWidth, 
+                    this.set(vec, new ImageObject(tileset.name,
+                                                  shapes.makeRect(tileset.margin + Math.floor((gid - tileset.firstGid) % tileset.numColumns) * (tileset.tileWidth + tileset.spacing),
+                                                                  tileset.margin + Math.floor((gid - tileset.firstGid) / tileset.numColumns) * (tileset.tileHeight + tileset.spacing),
+                                                                  tileset.tileWidth,
+                                                                  tileset.tileHeight),
+                                                  shapes.makeRect(vec.x * tileset.tileWidth,
+                                                                  vec.y * tileset.tileHeight,
+                                                                  tileset.tileWidth,
                                                                   tileset.tileHeight)));
                 }
             }, this.grid);
