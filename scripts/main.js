@@ -30,6 +30,7 @@ require(["scripts/game.js", "scripts/shapes.js"], function (game, shapes) {
     
     setInterval(function () {
         ctx.clearRect(0, 0, cnvs.width, cnvs.height);
+        map.update();
         map.draw(ctx);
         conSprite.update();
         conSprite.draw(ctx);

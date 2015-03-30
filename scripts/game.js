@@ -348,10 +348,10 @@ define(["scripts/shapes.js"], function (shapes) {
                             numRows = parseInt(props.numrows, 10),
                             numFrames = parseInt(props.numframes, 10),
                             am = JSON.parse(props.animmaps),
-                            animMaps = new Array(am.length),
+                            animMaps = [],
                             i = 0;
                         for (i = 0; i < am.length; i++) {
-                            animMaps.push(new AnimationMap(am[i].name, parseInt(am[i].row, 10), parseInt(am[i].first, 10), parseInt(am[i].length, 10), am[i].type, am[i].triggers));
+                            animMaps.push(new AnimMap(am[i].name, parseInt(am[i].row, 10), parseInt(am[i].first, 10), parseInt(am[i].length, 10), am[i].type, am[i].triggers));
                         }
                         return new Player(new ControlledSpriteObject(new SpriteObject(new ImageObject(name, srcRect, destRect), numFrames, numRows, animSpeed), animMaps), moveSpeed);
                     },
@@ -719,10 +719,27 @@ define(["scripts/shapes.js"], function (shapes) {
                 }
             }
         }
+        Map.prototype.update = function () {
+            this.layers.forEach(function (layer) {
+                if (layer.update) {
+                    layer.update();
+                } else if (Object.prototype.toString.call(layer) === "[object Array]") {
+                    layer.forEach(function (obj) {
+                        obj.update();
+                    });
+                }
+            });
+        };
         Map.prototype.draw = function (ctx) {
             this.layers.forEach(function (layer) {
                 if (layer.draw) {
                     layer.draw(ctx);
+                } else if (Object.prototype.toString.call(layer) === "[object Array]") {
+                    layer.forEach(function (obj) {
+                        if (obj.draw) {
+                            obj.draw(ctx);
+                        }
+                    });
                 }
             });
         };
